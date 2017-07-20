@@ -1,0 +1,30 @@
+*** Settings ***
+Library      exercises.py
+
+*** Test Cases ***
+Arguments
+    Log Name          Joe               Smith
+
+Type conversion
+    ${result} =       Multiply           10    3
+    Should Be Equal   ${result}          30
+
+Failing
+    Should Be Positive     10
+    Run keyword and expect error    -10 is not positive
+    ...    Should Be Positive     -10
+
+Arguments with default values
+    Log Name        firstname=Eric
+    Log Name        lastname=Jones
+
+Handle lists
+    All Should Be Positive    10   5   1   1.5   4e10    30
+    Run keyword and expect error    Not positive values: -4
+    ...    All Should Be Positive    12   2   -4  12.0
+
+Returning objects to robot
+    ${file} =     Open temporary file   ${TEMPDIR}${/}temp.txt
+    Write from a to z                   ${file}
+    Close file                          ${file}
+    File should have letters from a to z     ${TEMPDIR}${/}temp.txt
